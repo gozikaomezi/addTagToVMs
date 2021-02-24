@@ -1,0 +1,60 @@
+#Create a resource group variable
+ 
+$resourceGroupName=""
+
+#Create a list of tags
+
+$tags+=@{
+
+type="Virtual machine";
+
+resourcegroup="clp-uks-rg-dev-cctv";
+
+location="UK South"; 
+
+subscription="clp-sub-csp-development"; 
+
+backup="yes";
+
+patchingphase="0";
+
+servicetier="enhanced";
+
+supporthours="24x7"; 
+
+retention="30";
+
+application="CCTV Camera Storage Dev";
+
+environment="Dev";
+
+maintenance="2";
+
+tower="clp";
+
+costcentre="Secure City";
+
+servicelevel="Silver";	
+
+owner="Pete Digby";
+
+autostart="";
+
+autoshutdown="";
+
+projectcode=""; 
+
+service="CCTV";
+
+billable="yes"; 
+
+client=""; 
+
+}
+
+#For each VM in a Resource group add tags. Please note this will not delete existing tags 
+
+get-AzResource -ResourceGroupName $resourceGroupName -ResourceType Microsoft.Compute/virtualMachines | foreach {
+    Set-AzResource -ResourceId $_.resourceId -Tag $tags -Force
+}
+
